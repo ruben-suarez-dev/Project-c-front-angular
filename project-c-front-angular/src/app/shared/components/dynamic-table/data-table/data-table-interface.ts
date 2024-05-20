@@ -1,6 +1,5 @@
 export interface DTRow {
-    data: string[],
-    type: string[]
+    data: string[]
 }
 
 export interface DTColums {

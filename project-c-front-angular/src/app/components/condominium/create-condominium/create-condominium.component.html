@@ -1,17 +1,25 @@
-<form>
-<h1 class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl">Nuevo <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">Condominio</span></h1>
-  <div class="mb-5">
-      <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
-      <input type="text" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-  </div>
-  <div class="mb-5">
-      <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dirección</label>
-      <input type="text" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-  </div>
-  <div class="mb-5">
-      <label for="large-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descripción</label>
-      <input type="text" id="large-input" class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-  </div>
-  <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Agregar</button>
-  <button type="button" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Editar</button>
+<form [formGroup]="fb">
+    <h1 class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl">Nuevo <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">Condominio</span></h1>
+    <div class="mb-5">
+        <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
+        <input formControlName="name" required type="text" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        [ngClass]="{ 'required-highlight': fb.get('name')?.errors?.['required'] && fb.get('name')?.touched }">
+        <div *ngIf="fb.get('name')?.invalid && fb?.get('name')?.touched">
+            <p *ngIf="fb?.get('name')?.errors?.['required']" class="text-red-600 font-semibold">Nombre requerido</p>
+        </div>
+    </div>
+    <div class="mb-5">
+        <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dirección</label>
+        <input formControlName="address" required type="text" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        [ngClass]="{ 'required-highlight': fb.get('address')?.errors?.['required'] && fb.get('address')?.touched }">
+        <div *ngIf="fb.get('address')?.invalid && fb?.get('address')?.touched">
+            <p *ngIf="fb?.get('address')?.errors?.['required']" class="text-red-600 font-semibold">Dirección requerida</p>
+        </div>
+    </div>
+    <div class="mb-5">
+        <label for="large-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descripción</label>
+        <input formControlName="description" required type="text" id="large-input" class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <button type="button" (click)="createCondominium()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Agregar</button>
+    <button type="submit" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Editar</button>
 </form>

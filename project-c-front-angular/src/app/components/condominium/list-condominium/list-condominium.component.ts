@@ -1,15 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { DTColums } from '../../../shared/components/dynamic-table/data-table/data-table-interface';
 import { DynamicTableComponent } from "../../../shared/components/dynamic-table/dynamic-table.component";
 import { ApiCallInterceptor } from '../../../shared/services/api-call-interceptor.service';
+import { CondominiumInterface } from '../../../shared/interfaces/condominium.interface';
+import { ApiResponseService } from '../../../shared/services/api-response.service';
+import { ResponseStatus } from '../../../shared/interfaces/api-response.interface';
 
-
-interface CondominiumInterface {
-  name: string,
-  address: string,
-  description: string
-}
 
 @Component({
     selector: 'app-list-condominium',
@@ -20,8 +17,12 @@ interface CondominiumInterface {
 })
 export class ListCondominiumComponent implements OnInit {
 
-  constructor(private apiCallService: ApiCallInterceptor) {}
-
+  constructor(
+    private apiCallService: ApiCallInterceptor,
+    private apiResponse: ApiResponseService,
+    private cdr: ChangeDetectorRef
+  ) {}
+  
   listCondominium: CondominiumInterface[] = []
 
   dtTable: DTColums = {
@@ -30,14 +31,29 @@ export class ListCondominiumComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    // 
-    this.apiCallService.callApiAxios('http://127.0.0.1:8000/condominium/')
+    this.getCondominiums();
+    this.apiResponse.reseponseObservable.subscribe((response) => {
+      if (response.code === ResponseStatus.OK) {
+        this.updateList(response.data)
+      }
+    });
+  }
+
+  updateList(response: CondominiumInterface) {
+    response.name
+    this.dtTable.rows.push({
+      data: [response.name, response.address, response.description]
+    })
+    this.cdr.detectChanges()
+  }
+
+  getCondominiums() {
+    this.apiCallService.callApiAxiosGet('http://127.0.0.1:8000/condominium/')
       .then((data: any) => {
         this.listCondominium = data;
         for (let index = 0; index < this.listCondominium.length; index++) {
           this.dtTable.rows.push({
-            data: [this.listCondominium[index].name, this.listCondominium[index].address, this.listCondominium[index].description],
-            type: ['text', 'text', 'text']
+            data: [this.listCondominium[index].name, this.listCondominium[index].address, this.listCondominium[index].description]
           })
         }
         this.dtTable.titles.push('Nombre', 'Dirección', 'Descriptción')
