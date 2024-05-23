@@ -5,7 +5,7 @@ import { DynamicTableComponent } from "../../../shared/components/dynamic-table/
 import { ApiCallInterceptor } from '../../../shared/services/api-call-interceptor.service';
 import { CondominiumInterface } from '../../../shared/interfaces/condominium.interface';
 import { ApiResponseService } from '../../../shared/services/api-response.service';
-import { ResponseStatus } from '../../../shared/interfaces/api-response.interface';
+import { EditRequestType, ResponseStatus } from '../../../shared/interfaces/api-response.interface';
 
 
 @Component({
@@ -22,6 +22,8 @@ export class ListCondominiumComponent implements OnInit {
     private apiResponse: ApiResponseService,
     private cdr: ChangeDetectorRef
   ) {}
+
+  editType: EditRequestType = EditRequestType.CONDOMINIUM
   
   listCondominium: CondominiumInterface[] = []
 
@@ -53,10 +55,18 @@ export class ListCondominiumComponent implements OnInit {
         this.listCondominium = data;
         for (let index = 0; index < this.listCondominium.length; index++) {
           this.dtTable.rows.push({
-            data: [this.listCondominium[index].name, this.listCondominium[index].address, this.listCondominium[index].description]
+            data: [
+              this.listCondominium[index].name,
+              this.listCondominium[index].address,
+              this.listCondominium[index].description,
+              this.listCondominium[index].id!
+            ]
           })
         }
+        // Considerar un espacio en blanco para poder manejar el ID
+        // con el fin de poder editar el producto.
         this.dtTable.titles.push('Nombre', 'Dirección', 'Descriptción')
+        this.dtTable.data2 = data
       })
       .catch((error: any) => {
         console.error('Error en la solicitud:', error);

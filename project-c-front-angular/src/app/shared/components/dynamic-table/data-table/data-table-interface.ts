@@ -1,3 +1,5 @@
+import { CondominiumInterface } from "../../../interfaces/condominium.interface"
+
 export interface DTRow {
     data: string[]
 }
@@ -5,4 +7,5 @@ export interface DTRow {
 export interface DTColums {
     titles: string[],
     rows: DTRow[]
+    data2?: CondominiumInterface[] 
 }
