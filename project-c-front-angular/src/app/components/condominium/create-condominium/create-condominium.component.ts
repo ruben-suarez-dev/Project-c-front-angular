@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { ApiCallInterceptor } from '../../../shared/services/api-call-interceptor.service';
 import { CommonModule } from '@angular/common';
 import { CondominiumInterface } from '../../../shared/interfaces/condominium.interface';
-import { error } from 'console';
 import { ApiResponseService } from '../../../shared/services/api-response.service';
 
 @Component({
@@ -34,7 +33,6 @@ export class CreateCondominiumComponent {
         address: this.fb.get('address')?.value,
         description: this.fb.get('description')?.value
       }
-      console.log('Los datos son: ', requestData);
       this.apiCallService.callApiAxiosPost('http://127.0.0.1:8000/create-condominium/', requestData)
       .then((response) => {
         this.apiResponse.handleResponse(response);

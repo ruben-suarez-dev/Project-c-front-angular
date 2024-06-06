@@ -23,5 +23,5 @@
     </table>
 </div>
 
-<app-edit-modal *ngIf="isModalOpen" (closeModal)="closeModal()"/>
+<app-edit-modal *ngIf="isModalOpen" [editType]="editType" [editData]="editData" (deleteElement)="deleteElement($event)" (applyChanges)="applyChanges($event)" (closeModal)="closeModal()"/>
 

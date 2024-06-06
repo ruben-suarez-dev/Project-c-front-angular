@@ -1,10 +1,10 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { DTColums } from './data-table/data-table-interface';
 import { CommonModule } from '@angular/common';
-import { EditRequestType } from '../../interfaces/api-response.interface';
+import { RequestType } from '../../interfaces/api-response.interface';
 import { ApiCallInterceptor } from '../../services/api-call-interceptor.service';
-import { CondominiumInterface } from '../../interfaces/condominium.interface';
 import { EditModalComponent } from '../edit-modal/edit-modal.component';
+import { ApiResponseService } from '../../services/api-response.service';
 
 @Component({
   selector: 'app-dynamic-table',
@@ -16,34 +16,54 @@ import { EditModalComponent } from '../edit-modal/edit-modal.component';
 export class DynamicTableComponent {
 
   @Input() dtColumsData: DTColums | undefined;
-  @Input() editType: EditRequestType | undefined;
+  @Input() editType!: RequestType;
+  @Input() deleteType!: RequestType;
 
   isModalOpen = false;
+  editData: any;
 
-  constructor (private apiCallService: ApiCallInterceptor) {}
+  constructor (
+    private apiCallService: ApiCallInterceptor,
+    private apiResponse: ApiResponseService
+  ) {}
 
   updateElement(data: any) {
-    this.isModalOpen = true;
-    console.log('AAAA', this.isModalOpen);
-    /* let url = this.getEditUrlByType() + data + '/';
     let elementForEdit = this.dtColumsData?.data2?.find(element => element.id === data);
-    elementForEdit!.name = 'POST del front';
-    elementForEdit!.address = 'POST del front';
-    elementForEdit!.description = 'POST del front';
-    const requestData: CondominiumInterface = {
-      name: elementForEdit!.name,
-      address: elementForEdit!.address,
-      description: elementForEdit!.description
-    }
-    this.apiCallService.callApiAxiosPost(url, requestData); */
+    this.editData = elementForEdit;
+    this.isModalOpen = true;
   }
 
   closeModal() {
     this.isModalOpen = false;
   }
 
-  getEditUrlByType(): string {
-    return 'http://127.0.0.1:8000/' + this.editType + '/'; 
+  applyChanges(requestData: any) {
+    let url = this.getEditUrlByType(requestData.id);
+    this.apiCallService.callApiAxiosPost(url, requestData)
+    .then((response) => {
+      this.apiResponse.handleResponse(response);
+      this.isModalOpen = false;
+    }).catch((error: any) => {
+      console.log('Error al crear condominio: ', error);
+    });
+  }
+
+  deleteElement(id: string) {
+    let url = this.getDeleteUrlByType(id);
+    this.apiCallService.callApiAxiosPost(url)
+    .then((response) => {
+      this.apiResponse.handleResponse(response);
+    }).catch((error: any) => {
+      console.log('Error al crear condominio: ', error);
+    });
+  }
+
+  getDeleteUrlByType(id: string) {
+    return 'http://127.0.0.1:8000/' + this.deleteType + '/' + id + '/'; 
+  }
+
+  getEditUrlByType(id: string): string {
+    return 'http://127.0.0.1:8000/' + this.editType + '/' + id + '/'; 
   }
 
 }

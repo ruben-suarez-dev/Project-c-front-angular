@@ -26,7 +26,7 @@ export class ApiCallInterceptor {
     });
   }
 
-  callApiAxiosPost(url: string, data: any, header?: string): Promise<any> {
+  callApiAxiosPost(url: string, data?: any, header?: string): Promise<any> {
     return new Promise((resolve, reject) => {
       axios
         .post(url, data)
