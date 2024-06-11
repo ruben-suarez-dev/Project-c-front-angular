@@ -4,11 +4,20 @@ import { RequestType } from '../../interfaces/api-response.interface';
 import { CommonModule } from '@angular/common';
 import { CondominiumInterface } from '../../interfaces/condominium.interface';
 import { ConfirmRejectModalComponent } from '../confirm-reject-modal/confirm-reject-modal.component';
+import { EditCondominiumComponent } from '../../../components/condominium/edit-condominium/edit-condominium.component';
+import { EditHouseComponent } from '../../../components/house/edit-house/edit-house.component';
 
 @Component({
   selector: 'app-edit-modal',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, ConfirmRejectModalComponent],
+  imports: [
+    FormsModule,
+    CommonModule,
+    ReactiveFormsModule,
+    ConfirmRejectModalComponent,
+    EditCondominiumComponent,
+    EditHouseComponent
+  ],
   templateUrl: './edit-modal.component.html',
   styleUrl: './edit-modal.component.scss'
 })
@@ -20,6 +29,8 @@ export class EditModalComponent implements OnInit {
   @Output() closeModal = new EventEmitter<void>();
   @Output() applyChanges = new EventEmitter<any>();
   @Output() deleteElement = new EventEmitter<any>();
+
+  requestType = RequestType;
 
   confirmModalOpen = false;
 
@@ -35,7 +46,7 @@ export class EditModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.handleTitle();
-    this.initEditTypeValues();
+    // this.initEditTypeValues();
   }
 
   close() {
@@ -56,8 +67,8 @@ export class EditModalComponent implements OnInit {
     this.confirmModalOpen = true;
   }
 
-  editElement() {
-    this.applyChanges.emit(this.handleEditValuesByType());
+  editElement(requestData: any) {
+    this.applyChanges.emit(requestData);
   }
 
   handleTitle() {

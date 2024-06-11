@@ -38,6 +38,7 @@ export class DynamicTableComponent {
   }
 
   applyChanges(requestData: any) {
+    console.log('Estoy en el dynamic table con los datos: ', requestData);
     let url = this.getEditUrlByType(requestData.id);
     this.apiCallService.callApiAxiosPost(url, requestData)
     .then((response) => {

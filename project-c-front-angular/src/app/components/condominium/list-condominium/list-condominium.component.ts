@@ -37,12 +37,12 @@ export class ListCondominiumComponent implements OnInit {
     this.getCondominiums();
     this.apiResponse.reseponseObservable.subscribe((response) => {
       if (response.code === ResponseStatus.OK) {
-        this.handleUpdateListByType(response);
-        // this.updateList(response.data);
+        // TODO: Hacer que la lista se actualice dependiendo del tipo de elemento
+        //this.handleUpdateListByType(response);
+        this.updateList(response.data);
       } else if (response.code === ResponseStatus.OK_EDIT) {
         this.editCondominiumResponse(response);
       } else if (response.code === ResponseStatus.OK_DELETE) {
-        console.log('Borre el dato: ', response);
         this.deleteElementFromList(response.data);
       }
     });
@@ -53,8 +53,8 @@ export class ListCondominiumComponent implements OnInit {
 
   }
 
+  // Con el fin de no volver a hacer un GET de los condominios se hace este procedimiento.
   editCondominiumResponse(response: any) {
-    let indexToUpdate = this.dtTable.rows.findIndex(id => id === response.data.id);
     let indexToUpdate2 = this.dtTable.data2?.map(data => {
       if (data.id === response.data.id) {
         return { ...data,
@@ -67,7 +67,15 @@ export class ListCondominiumComponent implements OnInit {
     });
     // Con los datos actualizados, creamos un "dummy" para poder actualizar la row especifica del elemento editado.
     let dataUpdated: string[] = [response.data.name, response.data.address, response.data.description, response.data.id];
-    this.dtTable.rows[indexToUpdate].data = dataUpdated;
+    let indexData = -1;
+    for (let index = 0; index < this.dtTable.rows.length; index++) {
+      // Esta validacion de index es para asegurarme que el Elemento exista dentro del listado.
+      indexData = this.dtTable.rows[index].data.findIndex((id => id === response.data.id));
+      if (indexData !== -1) {
+        this.dtTable.rows[index].data = dataUpdated;
+        break;
+        }
+    }
     this.dtTable.data2 = indexToUpdate2;
     this.cdr.detectChanges();
   }
