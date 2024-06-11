@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { Observable, Subscription, fromEvent } from 'rxjs';
 import { CondominiumContainerComponent } from '../condominium/condominium-container/condominium-container.component';
+import { HouseContainerComponent } from '../house/house-container/house-container.component';
 
 @Component({
   selector: 'app-main-container',
   standalone: true,
-  imports: [CommonModule, CondominiumContainerComponent],
+  imports: [CommonModule, CondominiumContainerComponent, HouseContainerComponent],
   templateUrl: './main-container.component.html',
   styleUrl: './main-container.component.scss'
 })

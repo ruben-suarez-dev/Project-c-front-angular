@@ -37,7 +37,8 @@ export class ListCondominiumComponent implements OnInit {
     this.getCondominiums();
     this.apiResponse.reseponseObservable.subscribe((response) => {
       if (response.code === ResponseStatus.OK) {
-        this.updateList(response.data);
+        this.handleUpdateListByType(response);
+        // this.updateList(response.data);
       } else if (response.code === ResponseStatus.OK_EDIT) {
         this.editCondominiumResponse(response);
       } else if (response.code === ResponseStatus.OK_DELETE) {
@@ -45,6 +46,11 @@ export class ListCondominiumComponent implements OnInit {
         this.deleteElementFromList(response.data);
       }
     });
+  }
+
+  handleUpdateListByType(response: any) {
+    console.log('el response es: ', response.type);
+
   }
 
   editCondominiumResponse(response: any) {
