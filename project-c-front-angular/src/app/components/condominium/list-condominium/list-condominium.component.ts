@@ -6,6 +6,7 @@ import { ApiCallInterceptor } from '../../../shared/services/api-call-intercepto
 import { CondominiumInterface } from '../../../shared/interfaces/condominium.interface';
 import { ApiResponseService } from '../../../shared/services/api-response.service';
 import { RequestType, ResponseStatus } from '../../../shared/interfaces/api-response.interface';
+import { SignalServiceService } from '../../../shared/services/signal-service.service';
 
 
 @Component({
@@ -108,6 +109,7 @@ export class ListCondominiumComponent implements OnInit {
     this.apiCallService.callApiAxiosGet('http://127.0.0.1:8000/condominium/')
       .then((data: any) => {
         this.listCondominium = data;
+        /* this.signalService.initCondominiumList(this.listCondominium); */
         for (let index = 0; index < this.listCondominium.length; index++) {
           this.dtTable.rows.push({
             data: [

@@ -3,6 +3,9 @@ import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { Observable, Subscription, fromEvent } from 'rxjs';
 import { CondominiumContainerComponent } from '../condominium/condominium-container/condominium-container.component';
 import { HouseContainerComponent } from '../house/house-container/house-container.component';
+import { ApiCallInterceptor } from '../../shared/services/api-call-interceptor.service';
+import { SignalServiceService } from '../../shared/services/signal-service.service';
+import { CondominiumInterface } from '../../shared/interfaces/condominium.interface';
 
 @Component({
   selector: 'app-main-container',
@@ -12,6 +15,11 @@ import { HouseContainerComponent } from '../house/house-container/house-containe
   styleUrl: './main-container.component.scss'
 })
 export class MainContainerComponent implements OnInit, OnDestroy {
+
+  constructor(
+    private apiCallService: ApiCallInterceptor,
+    private signalService: SignalServiceService
+  ) {}
 
   asideBarCollapse = signal(false);
 
@@ -30,7 +38,7 @@ export class MainContainerComponent implements OnInit, OnDestroy {
           }
         });
       }
-    }, 100)
+    }, 100);
   }
 
   showSideBar() {

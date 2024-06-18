@@ -17,6 +17,12 @@ export class CreateHouseComponent implements OnInit {
 
   listCondominium: CondominiumInterface[] = [];
 
+  fb: FormGroup = this.formBuilder.group({
+    number: ['', Validators.required],
+    condominium: ['', Validators.required],
+    description: ['']
+  })
+
   constructor(
     private apiCallService: ApiCallInterceptor,
     private apiResponse: ApiResponseService,
@@ -27,12 +33,6 @@ export class CreateHouseComponent implements OnInit {
     this.getCondominiums();
   }
 
-  fb: FormGroup = this.formBuilder.group({
-    number: ['', Validators.required],
-    condominium: ['', Validators.required],
-    description: ['']
-  })
-
   createHouse() {
     if (this.fb?.valid) {
       const requestData: HouseInterface = {
@@ -40,11 +40,9 @@ export class CreateHouseComponent implements OnInit {
         condominium: this.fb.get('condominium')?.value,
         description: this.fb.get('description')?.value
       }
-      console.log('el request de la casa es: ', requestData);
       this.apiCallService.callApiAxiosPost('http://127.0.0.1:8000/create-house/', requestData)
       .then((response) => {
         this.apiResponse.handleResponse(response);
-        console.log('El response es 111: ', response);
       }).catch((error: any) => {
         console.log('Error al crear condominio: ', error);
       });

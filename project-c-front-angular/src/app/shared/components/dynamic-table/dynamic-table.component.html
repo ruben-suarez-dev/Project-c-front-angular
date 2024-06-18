@@ -16,7 +16,7 @@
                 <td *ngFor="let data of dataList.data; let last = last" scope="row" class="px-6 py-4"
                 [ngClass]="{'font-medium text-gray-900 whitespace-nowrap dark:text-white': !last, 'text-right': last}">
                     <span *ngIf="!last">{{data}}</span>
-                    <button *ngIf="last" (click)="updateElement(data)" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
+                    <button *ngIf="last" (click)="openModal(data)" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
                 </td>
             </tr>
         </tbody>

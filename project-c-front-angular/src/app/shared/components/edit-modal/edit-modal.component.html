@@ -14,8 +14,13 @@
                 </button>
             </div>
             <!-- Modal body -->
-            <app-edit-condominium [editData]="editData" (openDeleteModal)="openDeleteModal()" (applyChanges)="editElement($event)" *ngIf="editType === requestType.EDITR_CONDOMINIUM" />
-            <app-edit-house *ngIf="editType === requestType.EDITR_HOUSE" />
+            <app-edit-condominium *ngIf="editType === requestType.EDITR_CONDOMINIUM"
+                [editData]="editData" (openDeleteModal)="openDeleteModal()"
+                (applyChanges)="editElement($event)"/>
+            <app-edit-house 
+                *ngIf="editType === requestType.EDITR_HOUSE"
+                [editData]="editData" (openDeleteModal)="openDeleteModal()"
+                (applyChanges)="editElement($event)"/>
         </div>
     </div>
 </div>

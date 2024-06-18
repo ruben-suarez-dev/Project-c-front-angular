@@ -1,8 +1,6 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 import { Injectable } from '@angular/core';
-import { ResponseStatus } from '../interfaces/api-response.interface';
-import { ApiResponseService } from './api-response.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +11,15 @@ export class ApiCallInterceptor {
 
   constructor() {}
   
-  callApiAxiosGet(url: string, header?: string): Promise<any> {
-    return new Promise((resolve, reject) => {
+  async callApiAxiosGet(url: string, header?: string): Promise<any> {
+    try {
+      const response = await axios.get(url);
+      return response.data;
+      /* console.log('Data fetched:', response.data); */
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+/*     return await new Promise((resolve, reject) => {
       axios
         .get(url)
         .then((response: AxiosResponse) => {
@@ -23,7 +28,7 @@ export class ApiCallInterceptor {
         .catch((error: any) => {
           reject(error);
         });
-    });
+    }); */
   }
 
   callApiAxiosPost(url: string, data?: any, header?: string): Promise<any> {

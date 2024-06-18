@@ -27,7 +27,7 @@ export class DynamicTableComponent {
     private apiResponse: ApiResponseService
   ) {}
 
-  updateElement(data: any) {
+  openModal(data: any) {
     let elementForEdit = this.dtColumsData?.data2?.find(element => element.id === data);
     this.editData = elementForEdit;
     this.isModalOpen = true;

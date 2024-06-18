@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterContentInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DynamicTableComponent } from '../../../shared/components/dynamic-table/dynamic-table.component';
 import { DTColums } from '../../../shared/components/dynamic-table/data-table/data-table-interface';
 import { RequestType } from '../../../shared/interfaces/api-response.interface';
@@ -6,6 +6,7 @@ import { ApiCallInterceptor } from '../../../shared/services/api-call-intercepto
 import { ApiResponseService } from '../../../shared/services/api-response.service';
 import { HouseInterface } from '../../../shared/interfaces/house.interface';
 import { CondominiumInterface } from '../../../shared/interfaces/condominium.interface';
+import { SignalServiceService } from '../../../shared/services/signal-service.service';
 
 @Component({
   selector: 'app-list-house',
@@ -18,18 +19,27 @@ export class ListHouseComponent implements OnInit {
 
   constructor(
     private apiCallService: ApiCallInterceptor,
+    private signalService: SignalServiceService,
     private apiResponse: ApiResponseService,
     private cdr: ChangeDetectorRef
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    if (this.signalService.getListCondominium.length <= 0) {
+      this.listCondominium = await this.apiCallService.callApiAxiosGet('http://127.0.0.1:8000/condominium/');
+      this.signalService.setListCondominium = this.listCondominium;
+    } else {
+      this.listCondominium = this.signalService.getListCondominium;
+    }
     this.getHouse();
+    /* this.getCondominiums(); */
   }
 
   editType: RequestType = RequestType.EDITR_HOUSE
   deleteType: RequestType = RequestType.DELETE_HOUSE
   
   listHouse: HouseInterface[] = []
+  listCondominium: CondominiumInterface[] = [];
 
   dtTable: DTColums = {
     rows: [],
@@ -41,10 +51,11 @@ export class ListHouseComponent implements OnInit {
       .then((data: any) => {
         this.listHouse = data;
         for (let index = 0; index < this.listHouse.length; index++) {
+          let nameCondominium = this.listCondominium.find(data => data.id === this.listHouse[index].condominium);
           this.dtTable.rows.push({
             data: [
               this.listHouse[index].number,
-              this.listHouse[index].condominium,
+              nameCondominium!.name,
               this.listHouse[index].description,
               this.listHouse[index].id!
             ]
