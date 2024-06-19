@@ -27,7 +27,7 @@
 <app-confirm-reject-modal *ngIf="confirmModalOpen"
     (cancelAction)="cancelDelete()"
     (confirmAction)="confirmDelete()"
-    [title]="'Borrar Condominio'" 
+    [title]=this.confirmRejectModalTitle
     [confirmButton]="'Sí'" 
     [rejectButton]="'Cancelar'"
     [message]="'Una vez eliminado el condominio no se podra recuperar'"/>

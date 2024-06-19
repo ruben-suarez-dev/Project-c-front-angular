@@ -53,11 +53,20 @@ export class EditHouseComponent implements OnInit {
   }
 
   editHouseRequest() {
+    if (this.fb.valid) {
+      const editHouseRequest: HouseInterface = {
+        number: this.fb.get('number')?.value,
+        condominium: this.fb.get('condominium')?.value,
+        description: this.fb.get('description')?.value,
+        id: this.editData.id
+      }
+      this.applyChanges.emit(editHouseRequest);
+    }
 
   }
 
   deleteHouse() {
-
+    this.openDeleteModal.emit();
   }
 
 }

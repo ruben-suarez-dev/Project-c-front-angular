@@ -1,19 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RequestType } from '../../interfaces/api-response.interface';
-import { CommonModule } from '@angular/common';
-import { CondominiumInterface } from '../../interfaces/condominium.interface';
 import { ConfirmRejectModalComponent } from '../confirm-reject-modal/confirm-reject-modal.component';
 import { EditCondominiumComponent } from '../../../components/condominium/edit-condominium/edit-condominium.component';
 import { EditHouseComponent } from '../../../components/house/edit-house/edit-house.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-edit-modal',
   standalone: true,
   imports: [
-    FormsModule,
     CommonModule,
-    ReactiveFormsModule,
     ConfirmRejectModalComponent,
     EditCondominiumComponent,
     EditHouseComponent
@@ -35,18 +31,12 @@ export class EditModalComponent implements OnInit {
   confirmModalOpen = false;
 
   title: string = '';
+  confirmRejectModalTitle: string = '';
 
-  fb: FormGroup = this.formBuilder.group({
-    name: ['', Validators.required],
-    address: ['', Validators.required],
-    description: [''],
-  });
-
-  constructor (private formBuilder: FormBuilder) {}
+  constructor () {}
 
   ngOnInit(): void {
     this.handleTitle();
-    // this.initEditTypeValues();
   }
 
   close() {
@@ -75,12 +65,15 @@ export class EditModalComponent implements OnInit {
     switch (this.editType) {
       case RequestType.EDITR_CONDOMINIUM:
         this.title = 'Editar Condominio';
+        this.confirmRejectModalTitle = 'Borrar Condominio';
         break;
       case RequestType.EDITR_HOUSE:
         this.title = 'Editar Casa';
+        this.confirmRejectModalTitle = 'Borrar Casa';
         break;
       case RequestType.EDITR_INHABITANTS:
         this.title = 'Editar Habitante';
+        this.confirmRejectModalTitle = 'Borrar Habitante';
         break;
     
       default:
@@ -88,43 +81,4 @@ export class EditModalComponent implements OnInit {
         break;
     }
   }
-
-  handleDeleteValuesByType() {
-    this.confirmModalOpen = true;
-  }
-
-  handleEditValuesByType(): CondominiumInterface {
-    let requestDataEdited;
-    switch (this.editType) {
-      case RequestType.EDITR_CONDOMINIUM:
-          const condominiumEditData: CondominiumInterface = {
-          name: this.fb.get('name')?.value,
-          address: this.fb.get('address')?.value,
-          description: this.fb.get('description')?.value,
-          id: this.editData.id
-        }
-        requestDataEdited = condominiumEditData;
-        break;
-    
-      default:
-        break;
-    }
-    return requestDataEdited!;
-  }
-
-  initEditTypeValues() {
-    switch (this.editType) {
-      case RequestType.EDITR_CONDOMINIUM:
-        const condominiumEditData = <CondominiumInterface>this.editData
-        console.log('asdassda', this.editData);
-        this.fb.get('name')?.setValue(condominiumEditData.name);
-        this.fb.get('address')?.setValue(condominiumEditData.address);
-        this.fb.get('description')?.setValue(condominiumEditData.description);
-        break;
-    
-      default:
-        break;
-    }
-  }
-
 }
