@@ -6,6 +6,7 @@ import { HouseContainerComponent } from '../house/house-container/house-containe
 import { ApiCallInterceptor } from '../../shared/services/api-call-interceptor.service';
 import { SignalServiceService } from '../../shared/services/signal-service.service';
 import { CondominiumInterface } from '../../shared/interfaces/condominium.interface';
+import { PageName } from '../../shared/enums/page-names.enum';
 
 @Component({
   selector: 'app-main-container',
@@ -23,10 +24,14 @@ export class MainContainerComponent implements OnInit, OnDestroy {
 
   asideBarCollapse = signal(false);
 
+  currentPage!: PageName; 
+  pageName = PageName;
+
   resizeObservable$: Observable<Event> = new Observable<Event>;
   resizeSubscription$: Subscription = new Subscription;
 
   ngOnInit() {
+    this.currentPage = this.signalService.getCurrentPage;
     setTimeout(() => {
       if (typeof window !== 'undefined') {
         this.resizeObservable$ = fromEvent(window, 'resize')
@@ -53,6 +58,13 @@ export class MainContainerComponent implements OnInit, OnDestroy {
     }
 
     console.log('El valor del signal es:', this.asideBarCollapse());
+  }
+
+  changeCurrentPage(page: PageName) {
+    if (this.currentPage !== page) {
+      this.signalService.setCurrentPage = page;
+      this.currentPage = this.signalService.getCurrentPage;
+    }
   }
 
   ngOnDestroy() {

@@ -20,6 +20,7 @@ export class ListCondominiumComponent implements OnInit {
 
   constructor(
     private apiCallService: ApiCallInterceptor,
+    private signalService: SignalServiceService,
     private apiResponse: ApiResponseService,
     private cdr: ChangeDetectorRef
   ) {}
@@ -34,12 +35,16 @@ export class ListCondominiumComponent implements OnInit {
     titles: []
   };
 
-  ngOnInit(): void {
-    this.getCondominiums();
+  async ngOnInit(): Promise<void> {
+    if (this.signalService.getListCondominium.length <= 0) {
+      this.listCondominium = await this.apiCallService.callApiAxiosGet('http://127.0.0.1:8000/condominium/');
+      this.signalService.setListCondominium = this.listCondominium;
+    } else {
+      this.listCondominium = this.signalService.getListCondominium;
+    }
+    this.setInTableCondominiums();
     this.apiResponse.reseponseObservable.subscribe((response) => {
       if (response.code === ResponseStatus.OK) {
-        // TODO: Hacer que la lista se actualice dependiendo del tipo de elemento
-        //this.handleUpdateListByType(response);
         this.updateList(response.data);
       } else if (response.code === ResponseStatus.OK_EDIT) {
         this.editCondominiumResponse(response);
@@ -47,11 +52,6 @@ export class ListCondominiumComponent implements OnInit {
         this.deleteElementFromList(response.data);
       }
     });
-  }
-
-  handleUpdateListByType(response: any) {
-    console.log('el response es: ', response.type);
-
   }
 
   // Con el fin de no volver a hacer un GET de los condominios se hace este procedimiento.
@@ -89,7 +89,6 @@ export class ListCondominiumComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-
   deleteElementFromList(responseID: any) {
     let indexData = -1;
     for (let index = 0; index < this.dtTable.rows.length; index++) {
@@ -105,28 +104,20 @@ export class ListCondominiumComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  getCondominiums() {
-    this.apiCallService.callApiAxiosGet('http://127.0.0.1:8000/condominium/')
-      .then((data: any) => {
-        this.listCondominium = data;
-        /* this.signalService.initCondominiumList(this.listCondominium); */
-        for (let index = 0; index < this.listCondominium.length; index++) {
-          this.dtTable.rows.push({
-            data: [
-              this.listCondominium[index].name,
-              this.listCondominium[index].address,
-              this.listCondominium[index].description,
-              this.listCondominium[index].id!
-            ]
-          })
-        }
-        // Considerar un espacio en blanco para poder manejar el ID
-        // con el fin de poder editar el producto.
-        this.dtTable.titles.push('Nombre', 'Dirección', 'Descriptción');
-        this.dtTable.data2 = data;
+  setInTableCondominiums() {
+    for (let index = 0; index < this.listCondominium.length; index++) {
+      this.dtTable.rows.push({
+        data: [
+          this.listCondominium[index].name,
+          this.listCondominium[index].address,
+          this.listCondominium[index].description,
+          this.listCondominium[index].id!
+        ]
       })
-      .catch((error: any) => {
-        console.error('Error en la solicitud:', error);
-      });
+    }
+    // Considerar un espacio en blanco para poder manejar el ID
+    // con el fin de poder editar el producto.
+    this.dtTable.titles.push('Nombre', 'Dirección', 'Descriptción');
+    this.dtTable.data2 = this.listCondominium;
   }
 }
