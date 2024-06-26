@@ -7,6 +7,7 @@ import { CondominiumInterface } from '../../../shared/interfaces/condominium.int
 import { ApiResponseService } from '../../../shared/services/api-response.service';
 import { RequestType, ResponseStatus } from '../../../shared/interfaces/api-response.interface';
 import { SignalServiceService } from '../../../shared/services/signal-service.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { SignalServiceService } from '../../../shared/services/signal-service.se
     styleUrl: './list-condominium.component.scss',
     imports: [CommonModule, DynamicTableComponent]
 })
-export class ListCondominiumComponent implements OnInit {
+export class ListCondominiumComponent implements OnInit, OnDestroy {
 
   constructor(
     private apiCallService: ApiCallInterceptor,
@@ -24,6 +25,8 @@ export class ListCondominiumComponent implements OnInit {
     private apiResponse: ApiResponseService,
     private cdr: ChangeDetectorRef
   ) {}
+
+  subs!: Subscription;
 
   editType: RequestType = RequestType.EDITR_CONDOMINIUM
   deleteType: RequestType = RequestType.DELETE_CONDOMINIUM
@@ -43,9 +46,10 @@ export class ListCondominiumComponent implements OnInit {
       this.listCondominium = this.signalService.getListCondominium;
     }
     this.setInTableCondominiums();
-    this.apiResponse.reseponseObservable.subscribe((response) => {
+    this.subs = this.apiResponse.reseponseObservable.subscribe((response) => {
+      console.log('response del condominio: ', response);
       if (response.code === ResponseStatus.OK) {
-        this.updateList(response.data);
+        this.updateListOnCreate(response.data);
       } else if (response.code === ResponseStatus.OK_EDIT) {
         this.editCondominiumResponse(response);
       } else if (response.code === ResponseStatus.OK_DELETE) {
@@ -56,7 +60,7 @@ export class ListCondominiumComponent implements OnInit {
 
   // Con el fin de no volver a hacer un GET de los condominios se hace este procedimiento.
   editCondominiumResponse(response: any) {
-    let indexToUpdate2 = this.dtTable.data2?.map(data => {
+    let editedData = this.dtTable.data2?.map(data => {
       if (data.id === response.data.id) {
         return { ...data,
           name: response.data.name,
@@ -77,15 +81,20 @@ export class ListCondominiumComponent implements OnInit {
         break;
         }
     }
-    this.dtTable.data2 = indexToUpdate2;
+    console.log('edited data: ', editedData);
+    this.signalService.setListCondominium = <CondominiumInterface[]>editedData;
+    this.dtTable.data2 = editedData;
     this.cdr.detectChanges();
   }
 
-  updateList(response: CondominiumInterface) {
+  updateListOnCreate(response: CondominiumInterface) {
     console.log('El response es: ', response);
     this.dtTable.rows.push({
-      data: [response.name, response.address, response.description]
+      data: [response.name, response.address, response.description, response.id!]
     });
+    this.dtTable.data2?.push(response);
+    this.listCondominium.push(response);
+    this.signalService.setListCondominium = this.listCondominium;
     this.cdr.detectChanges();
   }
 
@@ -99,8 +108,16 @@ export class ListCondominiumComponent implements OnInit {
         break;
       }
     }
-    console.log('Index es ', indexData);
-    console.log('lista actualizada ', this.dtTable.rows);
+    let editedData = this.dtTable.data2?.map(data => {
+      if (data.id !== responseID) {
+        return { ...data}
+      }
+      return data
+    });
+    console.log('edited data ', editedData);
+    this.signalService.setListCondominium = <CondominiumInterface[]>editedData;
+    this.dtTable.data2 = editedData;
+    /* console.log('lista actualizada ', this.dtTable.data2); */
     this.cdr.detectChanges();
   }
 
@@ -119,5 +136,9 @@ export class ListCondominiumComponent implements OnInit {
     // con el fin de poder editar el producto.
     this.dtTable.titles.push('Nombre', 'Dirección', 'Descriptción');
     this.dtTable.data2 = this.listCondominium;
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 }

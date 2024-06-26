@@ -38,6 +38,7 @@ export class EditHouseComponent implements OnInit {
   })
 
   ngOnInit(): void {
+    console.log('Edit Data house: ', this.editData);
     this.initFormData();
   }
 

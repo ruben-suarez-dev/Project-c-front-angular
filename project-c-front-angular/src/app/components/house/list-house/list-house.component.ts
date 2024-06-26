@@ -45,9 +45,7 @@ export class ListHouseComponent implements OnInit {
     this.getHouse();
     this.apiResponse.reseponseObservable.subscribe((response) => {
       if (response.code === ResponseStatus.OK) {
-        // TODO: Hacer que la lista se actualice dependiendo del tipo de elemento
-        //this.handleUpdateListByType(response);
-        /* this.updateList(response.data); */
+        this.updateListOnCreate(response.data);
       } else if (response.code === ResponseStatus.OK_EDIT) {
         this.editHouseListByResponse(response);
       } else if (response.code === ResponseStatus.OK_DELETE) {
@@ -56,8 +54,23 @@ export class ListHouseComponent implements OnInit {
     });
   }
 
+  updateListOnCreate(response: HouseInterface) {
+    console.log('El response es: ', response);
+    let nameCondominium = this.listCondominium.find(data => data.id === response.condominium);
+    this.dtTable.rows.push({
+      data: [response.number, nameCondominium!.name, response.description, response.id!]
+    });
+    this.dtTable.data2?.push(response);
+    this.listHouse.push(response);
+    this.signalService.setHouseList = this.listHouse;
+    this.cdr.detectChanges();
+  }
+
   // Con el fin de no volver a hacer un GET de House se hace este procedimiento.
   editHouseListByResponse(response: any) {
+    let nameCondominium = this.listCondominium.find(data => data.id === response.data.condominium);
+    console.log('lista condominio es: ', this.listCondominium);
+    console.log('condominio es: ', response);
     let editedData = this.dtTable.data2?.map(data => {
       if (data.id === response.data.id) {
         return { ...data,
@@ -69,7 +82,7 @@ export class ListHouseComponent implements OnInit {
       return data
     });
     // Con los datos actualizados, creamos un "dummy" para poder actualizar la row especifica del elemento editado.
-    let dataUpdated: string[] = [response.data.number, response.data.condominium, response.data.description, response.data.id];
+    let dataUpdated: string[] = [response.data.number, nameCondominium?.name, response.data.description, response.data.id];
     let indexData = -1;
     for (let index = 0; index < this.dtTable.rows.length; index++) {
       // Esta validacion de index es para asegurarme que el Elemento exista dentro del listado.
@@ -79,7 +92,7 @@ export class ListHouseComponent implements OnInit {
         break;
         }
     }
-    this.dtTable.data2 = editedData;
+    this.dtTable.data2 = <HouseInterface[]>editedData;
     this.cdr.detectChanges();
   }
 
