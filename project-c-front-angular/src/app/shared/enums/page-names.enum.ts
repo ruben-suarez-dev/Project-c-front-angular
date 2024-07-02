@@ -1,5 +1,6 @@
 export enum PageName {
     CONDOMINIUM = 'CONDOMINIUM',
-    HOUSE = 'HOUSE'
+    HOUSE = 'HOUSE',
+    INHABITANT = 'INHABITANT'
     
 }

@@ -5,13 +5,13 @@ import { CondominiumContainerComponent } from '../condominium/condominium-contai
 import { HouseContainerComponent } from '../house/house-container/house-container.component';
 import { ApiCallInterceptor } from '../../shared/services/api-call-interceptor.service';
 import { SignalServiceService } from '../../shared/services/signal-service.service';
-import { CondominiumInterface } from '../../shared/interfaces/condominium.interface';
 import { PageName } from '../../shared/enums/page-names.enum';
+import { InhabitantContainerComponent } from '../inhabitant/inhabitant-container/inhabitant-container.component';
 
 @Component({
   selector: 'app-main-container',
   standalone: true,
-  imports: [CommonModule, CondominiumContainerComponent, HouseContainerComponent],
+  imports: [CommonModule, CondominiumContainerComponent, HouseContainerComponent, InhabitantContainerComponent],
   templateUrl: './main-container.component.html',
   styleUrl: './main-container.component.scss'
 })

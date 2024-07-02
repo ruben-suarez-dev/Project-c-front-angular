@@ -15,20 +15,9 @@ export class ApiCallInterceptor {
     try {
       const response = await axios.get(url);
       return response.data;
-      /* console.log('Data fetched:', response.data); */
     } catch (error) {
         console.error('Error fetching data:', error);
     }
-/*     return await new Promise((resolve, reject) => {
-      axios
-        .get(url)
-        .then((response: AxiosResponse) => {
-          resolve(response.data);
-        })
-        .catch((error: any) => {
-          reject(error);
-        });
-    }); */
   }
 
   callApiAxiosPost(url: string, data?: any, header?: string): Promise<any> {
