@@ -69,8 +69,6 @@ export class ListHouseComponent implements OnInit {
   // Con el fin de no volver a hacer un GET de House se hace este procedimiento.
   editHouseListByResponse(response: any) {
     let nameCondominium = this.listCondominium.find(data => data.id === response.data.condominium);
-    console.log('lista condominio es: ', this.listCondominium);
-    console.log('condominio es: ', response);
     let editedData = this.dtTable.data2?.map(data => {
       if (data.id === response.data.id) {
         return { ...data,
@@ -106,8 +104,6 @@ export class ListHouseComponent implements OnInit {
         break;
       }
     }
-    console.log('Index es ', indexData);
-    console.log('lista actualizada ', this.dtTable.rows);
     this.cdr.detectChanges();
   }
 

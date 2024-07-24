@@ -37,9 +37,7 @@ export class CreateInhabitantsComponent implements OnInit {
   }
 
   createInhabitant() {
-    console.log('AAAAAAAA');
     if (this.fb?.valid) {
-      console.log('AAAAAAAA');
       const requestData: InhabitantInterface = {
         name: this.fb.get('name')?.value,
         email: this.fb.get('email')?.value,

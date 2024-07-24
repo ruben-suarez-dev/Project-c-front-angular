@@ -48,7 +48,6 @@ export class EditInabitantsComponent {
 
   editInhabitantRequest() {
     if (this.fb.valid) {
-      console.log('aaaaaaaa');
       const editHouseRequest: InhabitantInterface = {
         name: this.fb.get('name')?.value,
         email: this.fb.get('email')?.value,

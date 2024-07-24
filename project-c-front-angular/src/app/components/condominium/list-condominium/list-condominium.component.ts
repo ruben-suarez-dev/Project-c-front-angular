@@ -117,7 +117,6 @@ export class ListCondominiumComponent implements OnInit, OnDestroy {
     console.log('edited data ', editedData);
     this.signalService.setListCondominium = <CondominiumInterface[]>editedData;
     this.dtTable.data2 = editedData;
-    /* console.log('lista actualizada ', this.dtTable.data2); */
     this.cdr.detectChanges();
   }
 

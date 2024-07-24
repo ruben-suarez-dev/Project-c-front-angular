@@ -70,9 +70,6 @@ export class ListInhabitantsComponent {
   editInhabitantListByResponse(response: any) {
     let houseName = this.listHouse.find(data => data.id === response.data.house);
     let areTenantText = response.data.areTenant ? 'Si' : 'No';
-    console.log('lista house es: ', this.listHouse);
-    console.log('house es: ', houseName);
-    console.log('Inhabitant es: ', response);
     let editedData = this.dtTable.data2?.map(data => {
       if (data.id === response.data.id) {
         return { ...data,
