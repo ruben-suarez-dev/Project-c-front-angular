@@ -4,6 +4,7 @@ import { ConfirmRejectModalComponent } from '../confirm-reject-modal/confirm-rej
 import { EditCondominiumComponent } from '../../../components/condominium/edit-condominium/edit-condominium.component';
 import { EditHouseComponent } from '../../../components/house/edit-house/edit-house.component';
 import { CommonModule } from '@angular/common';
+import { EditInabitantsComponent } from '../../../components/inhabitant/edit-inabitants/edit-inabitants.component';
 
 @Component({
   selector: 'app-edit-modal',
@@ -12,7 +13,8 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     ConfirmRejectModalComponent,
     EditCondominiumComponent,
-    EditHouseComponent
+    EditHouseComponent,
+    EditInabitantsComponent
   ],
   templateUrl: './edit-modal.component.html',
   styleUrl: './edit-modal.component.scss'

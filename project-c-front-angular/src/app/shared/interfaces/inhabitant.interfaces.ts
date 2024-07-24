@@ -1,8 +1,8 @@
 export interface InhabitantInterface {
-    id: string
+    id?: string
     name: string
     email: string
-    age: number
+    age?: number
     phone: string
     areTenant: boolean
     house: string

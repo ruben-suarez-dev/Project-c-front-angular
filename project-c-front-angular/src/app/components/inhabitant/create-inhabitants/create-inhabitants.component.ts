@@ -5,6 +5,7 @@ import { ApiCallInterceptor } from '../../../shared/services/api-call-intercepto
 import { ApiResponseService } from '../../../shared/services/api-response.service';
 import { CondominiumInterface } from '../../../shared/interfaces/condominium.interface';
 import { HouseInterface } from '../../../shared/interfaces/house.interface';
+import { InhabitantInterface } from '../../../shared/interfaces/inhabitant.interfaces';
 
 @Component({
   selector: 'app-create-inhabitants',
@@ -26,7 +27,7 @@ export class CreateInhabitantsComponent implements OnInit {
     house: ['', Validators.required],
     email: ['', Validators.required],
     phone: ['', Validators.required],
-    areTenant: ['', Validators.required]
+    areTenant: [false]
   })
 
   listHouse: HouseInterface[] = [];
@@ -35,14 +36,18 @@ export class CreateInhabitantsComponent implements OnInit {
     this.getHouses()
   }
 
-  createHouse() {
+  createInhabitant() {
+    console.log('AAAAAAAA');
     if (this.fb?.valid) {
-      const requestData: HouseInterface = {
-        number: this.fb.get('number')?.value,
-        condominium: this.fb.get('condominium')?.value,
-        description: this.fb.get('description')?.value
+      console.log('AAAAAAAA');
+      const requestData: InhabitantInterface = {
+        name: this.fb.get('name')?.value,
+        email: this.fb.get('email')?.value,
+        phone: this.fb.get('phone')?.value,
+        areTenant: this.fb.get('areTenant')?.value,
+        house: this.fb.get('house')?.value
       }
-      this.apiCallService.callApiAxiosPost('http://127.0.0.1:8000/create-house/', requestData)
+      this.apiCallService.callApiAxiosPost('http://127.0.0.1:8000/create-inhabitant/', requestData)
       .then((response) => {
         this.apiResponse.handleResponse(response);
       }).catch((error: any) => {

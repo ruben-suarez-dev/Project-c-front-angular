@@ -21,6 +21,9 @@
                 *ngIf="editType === requestType.EDITR_HOUSE"
                 [editData]="editData" (openDeleteModal)="openDeleteModal()"
                 (applyChanges)="editElement($event)"/>
+            <app-edit-inabitants *ngIf="editType === requestType.EDITR_INHABITANTS"
+                [editData]="editData" (openDeleteModal)="openDeleteModal()"
+                (applyChanges)="editElement($event)" />
         </div>
     </div>
 </div>

@@ -58,7 +58,7 @@ export class ListInhabitantsComponent {
     console.log('El response es: ', response);
     let houseName = this.listHouse.find(data => data.id === response.house);
     this.dtTable.rows.push({
-      data: [response.name, houseName!.number, response.email, response.id]
+      data: [response.name, houseName!.number, response.email, response.id!]
     });
     this.dtTable.data2?.push(response);
     this.listInhabitant.push(response);
@@ -68,8 +68,10 @@ export class ListInhabitantsComponent {
 
   // Con el fin de no volver a hacer un GET de Inhabitant se hace este procedimiento.
   editInhabitantListByResponse(response: any) {
-    let houseName = this.listHouse.find(data => data.id === response.data.condominium);
+    let houseName = this.listHouse.find(data => data.id === response.data.house);
+    let areTenantText = response.data.areTenant ? 'Si' : 'No';
     console.log('lista house es: ', this.listHouse);
+    console.log('house es: ', houseName);
     console.log('Inhabitant es: ', response);
     let editedData = this.dtTable.data2?.map(data => {
       if (data.id === response.data.id) {
@@ -85,7 +87,7 @@ export class ListInhabitantsComponent {
     });
     // Con los datos actualizados, creamos un "dummy" para poder actualizar la row especifica del elemento editado.
     let dataUpdated: string[] = [response.data.name, houseName?.number,
-      response.data.email, response.data.phone, response.data.areTenant,
+      response.data.email, response.data.phone, areTenantText,
       response.data.id];
     let indexData = -1;
     for (let index = 0; index < this.dtTable.rows.length; index++) {
